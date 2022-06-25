@@ -46,6 +46,7 @@ fun LocationTrackingScreen(locationViewModel: LocationViewModel = hiltViewModel(
 }
 
 @Composable fun LocationItem(location: Location) {
+  val decimalSyntax = "%.4f"
   Card(
     shape = RoundedCornerShape(8.dp),
     elevation = 8.dp,
@@ -63,13 +64,13 @@ fun LocationTrackingScreen(locationViewModel: LocationViewModel = hiltViewModel(
         modifier = Modifier
           .fillMaxWidth(0.5F)
       ) {
-        LocationParamRow("Latitude: ", location.latitude.toString())
-        LocationParamRow("Longitude: ", location.longitude.toString())
+        LocationParamRow("Latitude: ", decimalSyntax.format(location.latitude))
+        LocationParamRow("Longitude: ", decimalSyntax.format(location.longitude))
       }
 
-      Column(modifier = Modifier.fillMaxWidth(0.5F)) {
-        LocationParamRow("Altitude: ", location.altitude.toString())
-        LocationParamRow("Bearing: ", location.bearing.toString())
+      Column(modifier = Modifier.fillMaxWidth(1F)) {
+        LocationParamRow("Altitude: ", decimalSyntax.format(location.altitude))
+        LocationParamRow("Bearing: ", decimalSyntax.format(location.bearing))
       }
     }
   }
