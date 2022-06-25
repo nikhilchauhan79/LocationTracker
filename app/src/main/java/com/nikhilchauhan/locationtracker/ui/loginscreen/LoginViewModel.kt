@@ -1,4 +1,4 @@
-package com.nikhilchauhan.locationtracker.loginscreen
+package com.nikhilchauhan.locationtracker.ui.loginscreen
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

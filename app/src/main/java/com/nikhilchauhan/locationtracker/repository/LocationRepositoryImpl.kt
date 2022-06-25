@@ -11,14 +11,15 @@ import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class LocationRepositoryImpl @Inject constructor(@ApplicationContext context: Context) : LocationRepository {
-  var fusedLocationClient: FusedLocationProviderClient
+class LocationRepositoryImpl @Inject constructor(
+  @ApplicationContext context: Context,
+  private var locationCallback: LocationCallback
+) : LocationRepository {
+  private var fusedLocationClient: FusedLocationProviderClient
   lateinit var locationRequest: LocationRequest
-  lateinit var locationCallback: LocationCallback
 
   init {
     fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-    setLocationCallback()
     setLocationRequest()
   }
 
@@ -27,7 +28,7 @@ class LocationRepositoryImpl @Inject constructor(@ApplicationContext context: Co
       interval = 100
       fastestInterval = 100
       priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-      smallestDisplacement = 1F
+      smallestDisplacement = 0F
     }
   }
 
@@ -39,19 +40,7 @@ class LocationRepositoryImpl @Inject constructor(@ApplicationContext context: Co
     )
   }
 
-  private fun setLocationCallback() {
-    locationCallback = object : LocationCallback() {
-      override fun onLocationResult(locationResult: LocationResult) {
-        super.onLocationResult(locationResult)
-        locationResult.locations.forEach { location ->
-          location?.run {
-            Log.d(
-              LocationRepositoryImpl::class.java.simpleName,
-              "Latitude $latitude Longitude $longitude"
-            )
-          }
-        }
-      }
-    }
+  override fun stopLocationUpdates() {
+    fusedLocationClient.removeLocationUpdates(locationCallback)
   }
 }

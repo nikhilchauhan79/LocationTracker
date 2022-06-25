@@ -1,4 +1,4 @@
-package com.nikhilchauhan.locationtracker.loginscreen
+package com.nikhilchauhan.locationtracker.ui.loginscreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,24 +10,38 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.work.ExistingWorkPolicy.REPLACE
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import com.nikhilchauhan.locationtracker.locationworker.CoroutineLocationWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel()) {
   val scope = rememberCoroutineScope()
+  val context = LocalContext.current
+
+  LaunchedEffect(key1 = true) {
+    val locationWorkRequest = OneTimeWorkRequest.from(CoroutineLocationWorker::class.java)
+    WorkManager.getInstance(context).enqueueUniqueWork("workLocation",REPLACE,locationWorkRequest)
+  }
+
   Column(
-    modifier = Modifier.fillMaxSize().padding(16.dp),
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(16.dp),
     verticalArrangement = Arrangement.Center
   ) {
     Column(

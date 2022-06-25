@@ -21,12 +21,3 @@ class AppModule {
   fun providePrefDataStoreManager(@ApplicationContext context: Context): PrefDataStoreManager =
     PrefDataStoreManager(context)
 }
-
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class LocationModule {
-
-  @Binds
-  @Singleton
-  abstract fun bindsLocationRepository(locationRepositoryImpl: LocationRepositoryImpl): LocationRepository
-}
