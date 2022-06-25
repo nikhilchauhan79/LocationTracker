@@ -3,13 +3,18 @@ package com.nikhilchauhan.locationtracker.locationworker
 import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
+import com.nikhilchauhan.locationtracker.model.Location
 import com.nikhilchauhan.locationtracker.repository.LocationRepository
 import com.nikhilchauhan.locationtracker.repository.LocationRepositoryImpl
+import com.nikhilchauhan.locationtracker.utils.FileUtils
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -17,13 +22,15 @@ import kotlinx.coroutines.delay
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
-class CoroutineLocationWorker(
-  private val context: Context,
-  params: WorkerParameters
+@HiltWorker
+class CoroutineLocationWorker @AssistedInject constructor(
+  @Assisted private val context: Context,
+  @Assisted params: WorkerParameters,
+  private val fileUtils: FileUtils
 ) : CoroutineWorker(context, params) {
   lateinit var locationCallback: LocationCallback
   lateinit var locationRepository: LocationRepository
-  var notificationUtils: NotificationUtils
+  private var notificationUtils: NotificationUtils
   var job: Job? = null
 
   init {
@@ -78,7 +85,7 @@ class CoroutineLocationWorker(
               LocationRepositoryImpl::class.java.simpleName,
               "Latitude $latitude Longitude $longitude"
             )
-            locationRepository.writeDataToFile(latitude, longitude)
+            fileUtils.writeDataToFile(Location(latitude, longitude, altitude, bearing))
           }
         }
       }

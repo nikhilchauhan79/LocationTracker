@@ -14,28 +14,25 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.work.ExistingWorkPolicy.REPLACE
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
-import com.nikhilchauhan.locationtracker.locationworker.CoroutineLocationWorker
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.nikhilchauhan.locationtracker.navigation.NavRoutes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel()) {
+fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(),navController: NavController) {
   val scope = rememberCoroutineScope()
-  val context = LocalContext.current
 
-  LaunchedEffect(key1 = true) {
-    val locationWorkRequest = OneTimeWorkRequest.from(CoroutineLocationWorker::class.java)
-    WorkManager.getInstance(context).enqueueUniqueWork("workLocation",REPLACE,locationWorkRequest)
+  LaunchedEffect(key1 = loginViewModel.loginState.value) {
+    if (loginViewModel.loginState.value)
+      navController.navigate(NavRoutes.Location.route)
   }
 
   Column(
@@ -49,7 +46,9 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel()) {
         .fillMaxWidth()
     ) {
       HeadingText(headingText = "Name")
-      TextInputField(label = "Name", text = "", onTextChanged = {})
+      TextInputField(label = "Name", text = loginViewModel.name.value, onTextChanged = {
+        loginViewModel.name.value = it
+      })
     }
     Spacer(modifier = Modifier.fillMaxSize(0.1F))
     Column(
@@ -57,7 +56,10 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel()) {
         .fillMaxWidth()
     ) {
       HeadingText(headingText = "Mobile Number")
-      TextInputField(label = "Mobile Number", text = "", onTextChanged = {})
+      TextInputField(
+        label = "Mobile Number", text = loginViewModel.mobileNumber.value, onTextChanged = {
+        loginViewModel.mobileNumber.value = it
+      })
     }
     Spacer(modifier = Modifier.fillMaxSize(0.1F))
     LoginButton(
@@ -100,7 +102,7 @@ fun TextInputField(
   onTextChanged: (String) -> Unit
 ) {
   TextField(
-    value = "", onValueChange = {
+    value = text, onValueChange = {
     onTextChanged(it)
   },
     modifier = Modifier.fillMaxWidth(), label = {

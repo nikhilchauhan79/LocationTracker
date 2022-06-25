@@ -1,6 +1,7 @@
 package com.nikhilchauhan.locationtracker.datastore
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -32,7 +33,9 @@ class PrefDataStoreManager @Inject constructor(private val context: Context) {
 
   suspend fun getUserFromDataStore(): User? {
     return context.dataStore.data.map { pref ->
-      User(pref[NAME].orEmpty(), pref[MOBILE_NUMBER].orEmpty())
+      User(pref[NAME].orEmpty(), pref[MOBILE_NUMBER].orEmpty()).also {
+        Log.d("login", "getUserFromDataStore: "+it.toString())
+      }
     }.firstOrNull()
   }
 }

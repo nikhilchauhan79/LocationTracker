@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.work.ForegroundInfo
 import androidx.work.WorkManager
+import com.nikhilchauhan.locationtracker.AppContants.WORKER_ID
 import com.nikhilchauhan.locationtracker.R
 import java.util.UUID
 
@@ -16,7 +17,6 @@ class NotificationUtils(
   private val context: Context,
   private val id: UUID
 ) {
-  private val WORKER_ID: String = "workLocation"
   fun createForegroundInfo(): ForegroundInfo {
     val intent = WorkManager.getInstance(context.applicationContext)
       .createCancelPendingIntent(id)

@@ -17,18 +17,20 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
-import com.nikhilchauhan.locationtracker.ui.loginscreen.LoginScreen
-import com.nikhilchauhan.locationtracker.repository.LocationRepository
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.nikhilchauhan.locationtracker.navigation.TrackerNavigation
 import com.nikhilchauhan.locationtracker.ui.theme.LocationTrackerTheme
+import com.nikhilchauhan.locationtracker.utils.FileUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
+  @Inject lateinit var fileUtils: FileUtils
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
+      val mainViewModel: MainViewModel = viewModel()
       LocationTrackerTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
           Scaffold(
@@ -38,7 +40,9 @@ class MainActivity : ComponentActivity() {
               }
             }
           ) {
-            LoginScreen()
+            if (mainViewModel.startDest.value.isNotBlank()) {
+              TrackerNavigation(mainViewModel.startDest.value)
+            }
           }
         }
       }
