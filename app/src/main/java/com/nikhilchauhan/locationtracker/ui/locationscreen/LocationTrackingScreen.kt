@@ -25,6 +25,8 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.nikhilchauhan.locationtracker.locationworker.CoroutineLocationWorker
 import com.nikhilchauhan.locationtracker.model.Location
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun LocationTrackingScreen(locationViewModel: LocationViewModel = hiltViewModel()) {
@@ -39,7 +41,7 @@ fun LocationTrackingScreen(locationViewModel: LocationViewModel = hiltViewModel(
     contentPadding = PaddingValues(8.dp),
     verticalArrangement = Arrangement.spacedBy(16.dp)
   ) {
-    items(locationViewModel.locations.value.locations) { location ->
+    items(locationViewModel.locations) { location ->
       LocationItem(location)
     }
   }
