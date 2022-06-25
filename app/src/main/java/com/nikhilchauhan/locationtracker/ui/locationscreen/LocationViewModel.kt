@@ -24,7 +24,7 @@ class LocationViewModel @Inject constructor(
     viewModelScope.launch {
       while (true) {
         locations.addAll(fileUtils.readDataFromFile().locations)
-        delay(600000)
+        delay(1800000)
       }
     }
   }
