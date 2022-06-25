@@ -61,7 +61,9 @@ class MainActivity : ComponentActivity() {
           this,
           arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
           ),
           AppContants.LOCATION_PERMISSION_REQUEST_CODE
         )

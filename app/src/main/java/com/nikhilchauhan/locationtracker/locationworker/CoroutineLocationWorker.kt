@@ -78,6 +78,7 @@ class CoroutineLocationWorker(
               LocationRepositoryImpl::class.java.simpleName,
               "Latitude $latitude Longitude $longitude"
             )
+            locationRepository.writeDataToFile(latitude, longitude)
           }
         }
       }
