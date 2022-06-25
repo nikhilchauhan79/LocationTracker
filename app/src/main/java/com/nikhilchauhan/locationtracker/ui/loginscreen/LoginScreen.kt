@@ -89,7 +89,7 @@ fun LoginButton(
     onLoginButtonClick()
   }) {
     Text(
-      text = text, style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
+      text = text, style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold),
       modifier = modifier, textAlign = TextAlign.Center
     )
   }
