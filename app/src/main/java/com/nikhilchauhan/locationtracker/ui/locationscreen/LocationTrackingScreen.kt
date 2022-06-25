@@ -57,7 +57,7 @@ fun LocationTrackingScreen(locationViewModel: LocationViewModel = hiltViewModel(
       modifier = Modifier
         .fillMaxWidth()
         .padding(vertical = 16.dp, horizontal = 8.dp),
-      horizontalArrangement = Arrangement.SpaceBetween,
+      horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
       Column(
         modifier = Modifier
